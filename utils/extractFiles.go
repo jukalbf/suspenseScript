@@ -1,27 +1,27 @@
 package utils
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"strings"
 )
 
-func ExtractFiles(dirNames []string) ([][]byte, []string) {
-	var rawFiles [][]byte
-	var filesDir []string
+// Extrai os arquivos que tem o hook target.
+func ExtractFiles(dirNames []string) (rawFiles [][]byte, filesDir []string) {
+	fmt.Println("=> Extraindo arquivo que contem a expressão")
 
 	for _, dir := range dirNames {
 		if strings.Contains(dir, ".") {
 			data, err := os.ReadFile(dir)
 
-			if err != nil {
-				log.Fatal(err)
-			}
+			CheckErr(err)
 
-			rawFiles = append(rawFiles, data)
-			filesDir = append(filesDir, dir)
+			if HasHook(data) {
+				rawFiles = append(rawFiles, data)
+				filesDir = append(filesDir, dir)
+			}
 		}
 	}
 
-	return rawFiles, filesDir
+	return
 }
