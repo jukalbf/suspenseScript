@@ -1,27 +1,22 @@
 package utils
 
 import (
-	"log"
 	"os"
 )
 
 // Lê diretório(dir) base e retorna um slice com os diretórios filhos — apenas diretórios
-func ReadDir(dir string) []string {
+func ReadDir(dir string) (dirNames []string) {
 	files, err := os.ReadDir(dir)
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	CheckErr(err)
 
-	dirNames := extractDirs(files, dir)
+	dirNames = extractDirs(files, dir)
 
-	return dirNames
+	return
 }
 
 // Extrai os diretórios para um slice
-func extractDirs(files []os.DirEntry, dir string) []string {
-	var dirNames []string
-
+func extractDirs(files []os.DirEntry, dir string) (dirNames []string) {
 	for _, file := range files {
 		if file.Name() != "" {
 			fullDir := dir + file.Name()
@@ -34,5 +29,5 @@ func extractDirs(files []os.DirEntry, dir string) []string {
 		}
 	}
 
-	return dirNames
+	return
 }
