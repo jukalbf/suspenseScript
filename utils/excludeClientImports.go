@@ -13,10 +13,12 @@ func ExcludeClientImports(scanner *bufio.Scanner) (lines []string) {
 		containsUse := strings.Contains(text, "use")
 		containsProvider := strings.Contains(text, "Provider")
 		containsParam := strings.Contains(text, "params")
+		containsCapParam := strings.Contains(text, "Params")
+		containsConst := strings.Contains(text, "const") && !strings.Contains(text, "export")
 		hasUse := containsImport && containsUse
 		hasProvider := containsImport && containsProvider
 
-		if !hasUse && !hasProvider && !containsUse && !containsParam && !containsProvider {
+		if !hasUse && !hasProvider && !containsUse && !containsParam && !containsProvider && !containsCapParam && !containsConst {
 			stringFormat := fmt.Sprintf("%s\n", text)
 			lines = append(lines, stringFormat)
 		}
