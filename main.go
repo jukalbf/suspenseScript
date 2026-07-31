@@ -2,39 +2,20 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"main/modules"
 	"main/utils"
-	"os"
 )
 
 func main() {
+	utils.CheckArgs()
+
 	fmt.Println("=> Iniciando processo...")
-	// codePath := `/home/jdev/Documents/projects/gcp_frontend/src/app/(pages)/`
+
 	codePath := `/home/jdev/Documents/projects/gcp_frontend/src/app/(pages)/`
-	var parentsFolder []string
 
-	dirNames := utils.ReadDir(codePath)
-	rawFiles, filesDir := utils.ExtractFiles(dirNames)
+	filesDir, componentsFolders := modules.MoveFiles(codePath)
 
-	count, targetFiles := utils.CountCheck(rawFiles)
-
-	for _, dir := range filesDir {
-		parent := utils.ExtractParentFolder(dir)
-		targetDir := fmt.Sprintf("src/components/%sContainer", parent)
-		os.Mkdir(targetDir, 0777)
-		parentsFolder = append(parentsFolder, targetDir)
-	}
-
-	for i, file := range targetFiles {
-		fileName := fmt.Sprintf("%s/index.tsx", parentsFolder[i])
-		err := os.WriteFile(fileName, file, 0777)
-
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	fmt.Println(count)
+	modules.RewriteFiles(filesDir, componentsFolders)
 }
 
 // Log dos diretorios. `defaultPath` — Caminho padrão
