@@ -11,9 +11,9 @@ func main() {
 
 	fmt.Println("=> Iniciando processo...")
 
-	codePath := `/home/jdev/Documents/projects/gcp_frontend/src/app/(pages)/`
+	appPath := `/home/user/path/src/app/(pages)/`
 
-	filesDir, componentsFolders := modules.MoveFiles(codePath)
+	filesDir, componentsFolders := modules.MoveFiles(appPath)
 
 	modules.RewriteFiles(filesDir, componentsFolders)
 }
