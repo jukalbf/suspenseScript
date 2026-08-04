@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// Verifica se o argumento foi passado.
 func CheckArgs() {
 	expression := os.Args
 
