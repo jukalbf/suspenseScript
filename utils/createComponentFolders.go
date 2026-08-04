@@ -11,7 +11,7 @@ func CreateComponentFolders(filesDir []string) (componentsDir []string) {
 
 	for _, dir := range filesDir {
 		fullFolderName := GetParentFolderName(dir)
-		parentDir := fmt.Sprintf("src/components/%s", fullFolderName)
+		parentDir := fmt.Sprintf("/home/user/path/src/components/%s", fullFolderName)
 		os.Mkdir(parentDir, os.ModePerm)
 		componentsDir = append(componentsDir, parentDir)
 	}
