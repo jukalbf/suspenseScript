@@ -8,26 +8,48 @@ import (
 	"strings"
 )
 
+// Módulo responsável por reescrever arquivos principais.
 func RewriteFiles(filesDir []string, componentFolders []string) {
-	file, err := os.Open(filesDir[1])
+	for _, file := range filesDir {
+		targetFile, err := os.Open(file)
 
-	utils.CheckErr(err)
+		utils.CheckErr(err)
 
-	scanner := bufio.NewScanner(file)
+		scanner := bufio.NewScanner(targetFile)
 
-	lines := utils.ExcludeClientImports(scanner)
+		fmt.Println("=> Removendo imports e consts...")
+		formatedRows := utils.FormatFileContent(scanner, targetFile)
 
-	for i, line := range lines {
-		if i == 0 {
-			extractedFolderName := utils.ExtractParentFolder(componentFolders[1])
-			componentName := fmt.Sprintf("%s%s", strings.ToUpper(extractedFolderName[:1]), extractedFolderName[1:])
-			lines[i] = fmt.Sprintf("import { %s } from '@/components/%s'\n", componentName, extractedFolderName)
-		}
+		fmt.Println("=> Imports e consts removidos com sucesso.")
 
-		if strings.Contains(line, "<PageHeader") {
-			utils.PlaceComponent(componentFolders[1], &lines[i+1])
+		for _, component := range componentFolders {
+			fmt.Println("------------------------------------------")
+			fmt.Printf("===> Componente atual: %s\n", component)
+
+			for j, row := range formatedRows {
+				if j == 0 {
+					insertComponentImport(component, &formatedRows[j])
+				}
+
+				if rowHasPageHeader(row) {
+					fmt.Printf("=====> Inserindo componente em: %s\n", file)
+					utils.PlaceComponent(component, &formatedRows[j+1])
+				}
+
+				utils.WriteSingleFile(file, strings.Join(formatedRows, ""))
+			}
 		}
 	}
+}
 
-	utils.WriteSingleFile(filesDir[1], strings.Join(lines, ""))
+// Insere o import do novo componente.
+func insertComponentImport(component string, row *string) {
+	extractedFolderName := utils.ExtractParentFolder(component)
+	componentName := fmt.Sprintf("%s%s", strings.ToUpper(extractedFolderName[:1]), extractedFolderName[1:])
+	*row = fmt.Sprintf("import %s from '@/components/%s'\n", componentName, extractedFolderName)
+}
+
+// Verifica se a linha(row) atual contem a tag `<PageHeader />`
+func rowHasPageHeader(row string) bool {
+	return strings.Contains(row, "<PageHeader />")
 }
