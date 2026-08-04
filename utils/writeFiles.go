@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// Cria novos componentes nas pastas.
 func WriteFiles(targetFiles [][]byte, parentsFolder []string) {
 	fmt.Println("=> Escrevendo os arquivos dentro das novas pastas...")
 	for i, file := range targetFiles {
