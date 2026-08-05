@@ -51,5 +51,5 @@ func insertComponentImport(component string, row *string) {
 
 // Verifica se a linha(row) atual contem a tag `<PageHeader />`
 func rowHasPageHeader(row string) bool {
-	return strings.Contains(row, "<PageHeader />")
+	return strings.Contains(row, "<PageHeader")
 }
