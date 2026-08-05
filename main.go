@@ -11,7 +11,7 @@ func main() {
 
 	fmt.Println("=> Iniciando processo...")
 
-	appPath := `/home/jdev/Documents/suspenseScript/examples/src/app/(pages)/`
+	appPath := `/home/user/path/suspenseScript/examples/src/app/(pages)/`
 
 	filesDir, componentsFolders := modules.MoveFiles(appPath)
 
